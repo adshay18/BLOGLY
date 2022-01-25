@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}{{user.first_name}}{% endblock %}
+{% block stylesheet%}<link rel="stylesheet" href="/static/app.css">{% endblock %}
+
+{% block content %}
+<div id="container">
+    <div id="img">
+        <img src="{{user.image_url}}" alt="{{user.first_name}}'s profile picture">
+        <p><b>{{user.first_name}} {{user.last_name}}</b></p>
+        <form action="/users/{{user.id}}/edit">
+            <button>Edit</button>
+        </form>
+        <form action="/users/{{user.id}}/delete" method="POST">
+            <button>Delete</button>
+        </form>
+        <button><a class="btn" href="/">Home</a></button>
+    </div>
+</div>
+{% endblock %}

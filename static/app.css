@@ -1,0 +1,16 @@
+img {
+	max-width: 200px;
+	display: inline;
+}
+
+body {
+	margin: auto;
+	text-align: center;
+}
+
+#container {
+	position: relative;
+	width: 75%;
+	margin: 0 auto;
+	top: 20px;
+}

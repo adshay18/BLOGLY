@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/main.css">
+    {% block stylesheet %}{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <!-- here is where we will put our messages! They will show up above page content, and be hidden if there are none. -->
+        <section class="messages">
+            {% for category, msg in messages %}
+            <p>{{msg}}</p>
+            <br>
+            {% endfor %}
+        </section>
+        {% endif %}
+        {% endwith %}
+</body>
+</html>
