@@ -66,3 +66,5 @@ class UserFlaskTestCase(TestCase):
             
             self.assertEqual(resp.status_code, 200)
             self.assertIn(f'placeholder="{user.first_name}"', html)
+            
+        # note to future self, test for errors like when an ID isn't in the database
