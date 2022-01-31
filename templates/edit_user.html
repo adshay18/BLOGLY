@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}New User{% endblock %}
+{% block title %}Edit User{% endblock %}
 {% block content %}
 <form action="/users/{{user.id}}/edit" method="POST">
     First Name: <input type="text" name="first_name" placeholder="{{user.first_name}}">

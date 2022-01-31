@@ -19,7 +19,7 @@
     <div id="posts">
         <h1>Posts</h1>
             {% for post in posts %}
-            <p>{{post.title}}</p>
+            <p><a href="/posts/{{post.id}}">{{post.title}}</a></p>
             {% endfor %}
         <button><a class="btn" href="/users/{{user.id}}/posts/new">Add Post</a></button>
     </div>

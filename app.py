@@ -120,4 +120,59 @@ def add_post(user_id):
     db.session.add(new_post)
     db.session.commit()
     
-    return redirect('/')
+    return redirect(f'/posts/{new_post.id}')
+
+@app.route('/posts/<int:post_id>')
+def show_post(post_id):
+    '''Display post from user'''
+    post = Post.query.get_or_404(post_id)
+    title = post.title
+    content = post.content
+    
+    user_id = post.user_id
+    user = User.query.get_or_404(user_id)
+    
+    return render_template('post_details.html', title=title, content=content, user=user, post=post)
+
+@app.route('/posts/<int:post_id>/delete', methods=["POST"])
+def delete_post(post_id):
+    '''Delete a user from db'''
+    post = Post.query.get_or_404(post_id)
+    user_id = post.user_id
+    user = User.query.get_or_404(user_id)
+    
+    Post.query.filter_by(id=post_id).delete()
+    db.session.commit()
+    return redirect(f'/users/{user.id}')
+
+@app.route('/posts/<int:post_id>/edit')
+def edit_post_form(post_id):
+    '''Show form to edit current post'''
+    post = Post.query.get_or_404(post_id)
+    return render_template('edit_post.html', post=post)
+
+@app.route('/posts/<int:post_id>/edit', methods=["POST"])
+def edit_post(post_id):
+    '''Change details of a post'''
+    post = Post.query.get(post_id)
+    user_id = post.user_id
+    user = User.query.get_or_404(user_id)
+    created_at = post.created_at
+    title = request.form.get('title')
+    content = request.form.get('content')
+    id = post.id
+    
+    if not title:
+        title = post.title
+    if not content:
+        content = post.content
+        
+    post.content = content
+    post.title = title
+    post.user_id = user_id
+    post.created_at = created_at
+    post.id = id
+    
+    db.session.add(post)
+    db.session.commit()
+    return redirect(f'/posts/{post.id}')

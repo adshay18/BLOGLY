@@ -1,6 +1,6 @@
 from unittest import TestCase
 from app import app
-from models import db, User
+from models import db, User, Post
 
 # please create a testing db 'user_test' to test this application
 
@@ -19,6 +19,7 @@ class UserFlaskTestCase(TestCase):
     def setUp(self):
         '''Clean up existing users'''
         User.query.delete()
+        Post.query.delete()
         
     def tearDown(self):
         '''Clean up failed transactions'''
