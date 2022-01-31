@@ -4,11 +4,14 @@
 <h1>All Tags</h1>
 <ul>
     {% for tag in tags %}
-    <li><a href="/tags/{{tags.id}}">{{tag.name}}</a></li>
+    <li><a href="/tags/{{tag.id}}">{{tag.name}}</a></li>
     {% endfor %}
 </ul>
 <form action="/tags/new" method="GET">
     <button>Add New Tag</button>
+</form>
+<form action="/users" method="GET">
+    <button>Home</button>
 </form>
 
 {% endblock %}

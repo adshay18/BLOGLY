@@ -200,3 +200,9 @@ def create_tag():
     db.session.commit()
     
     return redirect(f'/tags')
+
+@app.route('/tags/<int:tag_id>')
+def show_posts_from_tag(tag_id):
+    '''View all posts that have been tagged'''
+    tag = Tag.query.get_or_404(tag_id)
+    return render_template('tag_details.html', tag=tag)
