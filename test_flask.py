@@ -18,11 +18,15 @@ class UserFlaskTestCase(TestCase):
     
     def setUp(self):
         '''Clean up existing users'''
-        User.query.delete()
         Post.query.delete()
+        User.query.delete()
+        
+        db.session.commit()
         
     def tearDown(self):
         '''Clean up failed transactions'''
+        Post.query.delete()
+        User.query.delete()
         db.session.rollback()
         
     def test_redirect_to_users(self):
@@ -68,4 +72,51 @@ class UserFlaskTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn(f'placeholder="{user.first_name}"', html)
             
-        # note to future self, test for errors like when an ID isn't in the database
+        # ####note to future self, test for errors like when an ID isn't in the database
+        
+        
+    def test_show_posts_form(self):
+        '''shows new post form'''
+        user = User(first_name="Test2", last_name="Edit2", image_url="https://www.outbrain.com/techblog/wp-content/uploads/2017/05/road-sign-361513_960_720.jpg")
+        db.session.add(user)
+        db.session.commit()
+        
+        with app.test_client() as client:
+            resp = client.get(f'/users/{user.id}/posts/new')
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('placeholder="Title Text"', html)
+
+    def test_add_post(self):
+        '''New post is added to db and displays on page'''
+        user = User(first_name="Test3", last_name="Edit3", image_url="https://www.outbrain.com/techblog/wp-content/uploads/2017/05/road-sign-361513_960_720.jpg")
+        db.session.add(user)
+        db.session.commit()
+        
+        
+        with app.test_client() as client:
+            resp = client.post(f'/users/{user.id}/posts/new', data={
+                'title': 'Test Title',
+                'content': 'Test Content'
+            }, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<h1>Test Title</h1>', html)
+            
+    def test_show_post(self):
+        '''Makes sure correct post is shown'''
+        user = User(first_name="Test4", last_name="Edit4", image_url="https://www.outbrain.com/techblog/wp-content/uploads/2017/05/road-sign-361513_960_720.jpg")
+        db.session.add(user)
+        db.session.commit()
+        post = Post(title="Title", content="content", user_id=4)
+        db.session.add(post)
+        db.session.commit()
+        
+        with app.test_client() as client:
+            resp = client.get(f'/posts/{post.id}')
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<p>content</p>', html)
