@@ -12,5 +12,8 @@
 </ul>
 <button><a class="btn" href="/tags/{{tag.id}}/edit">Edit</a></button>
 <button><a class="btn" href="/tags">Cancel</a></button>
+<form action="/tags/{{tag.id}}/delete" method="POST">
+    <button>Delete</button>
+</form>
 
 {% endblock %}
