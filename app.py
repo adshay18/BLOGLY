@@ -206,3 +206,24 @@ def show_posts_from_tag(tag_id):
     '''View all posts that have been tagged'''
     tag = Tag.query.get_or_404(tag_id)
     return render_template('tag_details.html', tag=tag)
+
+@app.route('/tags/<int:tag_id>/edit')
+def edit_tag_form(tag_id):
+    '''Show form to edit an existing tag'''
+    tag = Tag.query.get_or_404(tag_id)
+    return render_template('edit_tag.html', tag=tag)
+
+@app.route('/tags/<int:tag_id>/edit', methods=["POST"])
+def edit_tag(tag_id):
+    '''Update tag in db and return to tag details page'''
+    tag = Tag.query.get_or_404(tag_id)
+    name = request.form.get('tag')
+
+    if not name:
+        name = tag.name
+        
+    tag.name = name
+    db.session.add(tag)
+    db.session.commit()
+    
+    return redirect(f'/tags/{tag.id}')
