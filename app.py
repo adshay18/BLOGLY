@@ -59,7 +59,8 @@ def generate_new_user():
 def show_user(user_id):
     '''Show name and profile pic of a user'''
     user = User.query.get_or_404(user_id)
-    return render_template("user_details.html", user=user)
+    posts = Post.query.filter(Post.user_id == user.id).all()
+    return render_template("user_details.html", user=user, posts=posts)
 
 @app.route('/users/<int:user_id>/edit')
 def edit_user(user_id):
@@ -96,4 +97,27 @@ def delete_user(user_id):
     '''Delete a user from db'''
     User.query.filter_by(id=user_id).delete()
     db.session.commit()
+    return redirect('/')
+
+
+# Section for creating posts ***************
+
+@app.route('/users/<int:user_id>/posts/new')
+def show_posts_form(user_id):
+    '''Show form to add a new post'''
+    user = User.query.get_or_404(user_id)
+    return render_template('new_post.html', user=user)
+
+
+@app.route('/users/<int:user_id>/posts/new', methods=["POST"])
+def add_post(user_id):
+    '''Create post and add to db'''
+    user = User.query.get_or_404(user_id)
+    title = request.form.get("title")
+    content = request.form.get("content")
+    
+    new_post = Post(title=title, content=content, user_id=user.id)
+    db.session.add(new_post)
+    db.session.commit()
+    
     return redirect('/')

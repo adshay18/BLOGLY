@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Make a post!{% endblock %}
+{% block content %}
+<form action="/users/{{user.id}}/posts/new" method="POST">
+    Title: <input type="text" name="title" placeholder="Title Text">
+    Content: <input type="text" name="content">
+    <button>Submit Post</button>
+</form>
+{% endblock %}

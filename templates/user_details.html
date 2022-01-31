@@ -15,5 +15,13 @@
         </form>
         <button><a class="btn" href="/">Home</a></button>
     </div>
+    <br>
+    <div id="posts">
+        <h1>Posts</h1>
+            {% for post in posts %}
+            <p>{{post.title}}</p>
+            {% endfor %}
+        <button><a class="btn" href="/users/{{user.id}}/posts/new">Add Post</a></button>
+    </div>
 </div>
 {% endblock %}
