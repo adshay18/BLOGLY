@@ -141,7 +141,9 @@ def show_post(post_id):
     user_id = post.user_id
     user = User.query.get_or_404(user_id)
     
-    return render_template('post_details.html', title=title, content=content, user=user, post=post)
+    tags = post.tags
+    
+    return render_template('post_details.html', title=title, content=content, user=user, post=post, tags=tags)
 
 @app.route('/posts/<int:post_id>/delete', methods=["POST"])
 def delete_post(post_id):
@@ -223,7 +225,8 @@ def create_tag():
 def show_posts_from_tag(tag_id):
     '''View all posts that have been tagged'''
     tag = Tag.query.get_or_404(tag_id)
-    return render_template('tag_details.html', tag=tag)
+    posts = tag.posts
+    return render_template('tag_details.html', tag=tag, posts=posts)
 
 @app.route('/tags/<int:tag_id>/edit')
 def edit_tag_form(tag_id):

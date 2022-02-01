@@ -3,6 +3,12 @@
 {% block content %}
 <h1>{{title}}</h1>
 <p>{{content}}</p>
+<div class="tags">
+    <h4>Tags:</h4>
+    {% for tag in tags %}
+    <a href="/tags/{{tag.id}}">{{tag.name}}</a>
+    {% endfor %}
+</div>
 <button><a class="btn" href="/users/{{user.id}}">Cancel</a></button>
 <button><a class="btn" href="/posts/{{post.id}}/edit">Edit</a></button>
 <form action="/posts/{{post.id}}/delete" method="POST">

@@ -3,12 +3,9 @@
 {% block content %}
 <h1>{{tag.name}}</h1>
 <ul>
-    <li>
-        post1
-    </li>
-    <li>
-        post2
-    </li>
+    {% for post in posts %}
+    <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+    {% endfor %}
 </ul>
 <button><a class="btn" href="/tags/{{tag.id}}/edit">Edit</a></button>
 <button><a class="btn" href="/tags">Cancel</a></button>
