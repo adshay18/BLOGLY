@@ -1,6 +1,6 @@
 from unittest import TestCase
 from app import app
-from models import db, User, Post
+from models import db, User, Post, Tag, PostTag
 
 # please create a testing db 'user_test' to test this application
 
@@ -20,13 +20,13 @@ class UserFlaskTestCase(TestCase):
         '''Clean up existing users'''
         Post.query.delete()
         User.query.delete()
+        Tag.query.delete()
+        PostTag.query.delete()
         
         db.session.commit()
         
     def tearDown(self):
         '''Clean up failed transactions'''
-        Post.query.delete()
-        User.query.delete()
         db.session.rollback()
         
     def test_redirect_to_users(self):
@@ -120,3 +120,26 @@ class UserFlaskTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn('<p>content</p>', html)
+            
+    def test_show_tag_form(self):
+        '''Shows for to submit tag'''
+        with app.test_client() as client:
+            resp = client.get('/tags/new')
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<h1>New Tag</h1>', html)
+            
+    def test_edit_tag(self):
+        '''Changes data on form submission'''
+        tag = Tag(name="Test_tag_1")
+        db.session.add(tag)
+        db.session.commit()
+
+        with app.test_client() as client:
+            resp = client.post(f'/tags/{tag.id}/edit', data={
+                "tag": "changed_test_tag"}, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(f'<h1>changed_test_tag</h1>', html)
