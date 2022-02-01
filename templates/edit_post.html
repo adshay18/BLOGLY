@@ -4,6 +4,9 @@
 <form action="/posts/{{post.id}}/edit" method="POST">
     Title: <input type="text" name="title" placeholder="Change Title">
     Content: <input type="text" name="content" placeholder="Change content">
+    {% for tag in tags %}
+    <input type="checkbox" value="{{tag.id}}" name="tags">{{tag.name}}</input>
+    {% endfor %}
     <button>Update Post</button>
 </form>
 <button><a class="btn" href="/posts/{{post.id}}">Cancel</a></button>

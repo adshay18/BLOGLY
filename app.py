@@ -106,7 +106,8 @@ def delete_user(user_id):
 def show_posts_form(user_id):
     '''Show form to add a new post'''
     user = User.query.get_or_404(user_id)
-    return render_template('new_post.html', user=user)
+    tags = Tag.query.all()
+    return render_template('new_post.html', user=user, tags=tags)
 
 
 @app.route('/users/<int:user_id>/posts/new', methods=["POST"])
@@ -119,6 +120,14 @@ def add_post(user_id):
     new_post = Post(title=title, content=content, user_id=user.id)
     db.session.add(new_post)
     db.session.commit()
+    tags = request.form.getlist('tags')
+    
+    if tags:
+        for tag in tags:
+            new_posttag = PostTag(post_id=new_post.id, tag_id=tag)
+            db.session.add(new_posttag)
+            db.session.commit()
+    
     
     return redirect(f'/posts/{new_post.id}')
 
@@ -149,7 +158,8 @@ def delete_post(post_id):
 def edit_post_form(post_id):
     '''Show form to edit current post'''
     post = Post.query.get_or_404(post_id)
-    return render_template('edit_post.html', post=post)
+    tags = Tag.query.all()
+    return render_template('edit_post.html', post=post, tags=tags)
 
 @app.route('/posts/<int:post_id>/edit', methods=["POST"])
 def edit_post(post_id):
@@ -175,6 +185,14 @@ def edit_post(post_id):
     
     db.session.add(post)
     db.session.commit()
+    
+    tags = request.form.getlist('tags')
+    
+    if tags:
+        for tag in tags:
+            new_posttag = PostTag(post_id=post.id, tag_id=tag)
+            db.session.add(new_posttag)
+            db.session.commit()
     return redirect(f'/posts/{post.id}')
 
 ### SECTION FOR ADDING TAGS ###
