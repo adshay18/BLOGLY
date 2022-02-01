@@ -35,7 +35,7 @@ class Post(db.Model):
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
-    tags = db.relationship('Tag', secondary="posttags", backref="posts")
+    tags = db.relationship('Tag', secondary="posttags", backref="posts", cascade="all,delete")
     
 class Tag(db.Model):
     __tablename__ = 'tags'

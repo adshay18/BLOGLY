@@ -3,6 +3,9 @@
 {% block content %}
 <h1>{{title}}</h1>
 <p>{{content}}</p>
+<div>
+    <p>Created by {{user.first_name}} {{user.last_name}} on {{post.created_at}}</p>
+</div>
 <div class="tags">
     <h4>Tags:</h4>
     {% for tag in tags %}

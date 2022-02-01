@@ -253,7 +253,7 @@ def edit_tag(tag_id):
 def delete_tag(tag_id):
     '''delete a tag from db'''
     tag = Tag.query.get_or_404(tag_id)
-    Tag.query.filter_by(id=tag_id).delete()
+    db.session.delete(tag)
     db.session.commit()
     
     return redirect('/tags')
